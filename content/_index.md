@@ -11,24 +11,56 @@ title = "Compose"
 
 {{< block "grid-2" >}}
 {{< column >}}
-# Compose your Docs with __Ease__.
-
-Compose is a lean theme for the `Hugo`, inspired by [forestry.io](https://forestry.io). 
-
-We do a [Pull Request](https://github.com/onweru/compose/pulls) contributions workflow on **GitHub**. Also feel free to raise any issues or feature suggestions.
-
-{{< tip "warning" >}}
-Note that the theme is built with simplicity in mind. [This way](/), if a suggestion complicates the usability of the theme, it may be declined. New users are always welcome!
-{{< /tip >}}
 
 {{< tip >}}
-You can [generate graphs, charts](]("docs/compose/graphs-charts-tables/#show-a-pie-doughnut--bar-chart-at-once")) and tables from a csv, ~~or a json~~ dataset
+This project is in no way affiliated with [Velero](https://velero.io).
 {{< /tip >}}
 
-{{< button "docs/compose/" "Read the Docs" >}}{{< button "https://github.com/onweru/compose" "Download Theme" >}}
+Velero Sentinel was born out of the necessity to get informed about failed and partially failed backups made with [Velero][velero].
+
+There are more elaborate alternatives out there. If you have [Prometheus Operator][prometheus:operator] running, you can [achieve the same](https://github.com/vmware-tanzu/velero/issues/2725) with a simple rule:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: velero
+spec:
+  groups:
+  - name: velero-failures
+    rules:
+    - alert: VeleroBackupPartialFailures
+      annotations:
+        message: Velero backup {{ $labels.schedule }} has {{ $value | humanizePercentage }} partialy failed backups.
+      expr: |-
+        velero_backup_partial_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.25
+      for: 15m
+      labels:
+        severity: warning
+    - alert: VeleroBackupFailures
+      annotations:
+        message: Velero backup {{ $labels.schedule }} has {{ $value | humanizePercentage }} failed backups.
+      expr: |-
+        velero_backup_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.25
+      for: 15m
+      labels:
+        severity: warning
+```
+
+However, this requires more moving parts. The goal of Velero Sentinel is to provide the most simple solution possible.
+
+{{< tip "warning" >}}
+Velero Sentinel is still work in progress. Although it only needs read access to your cluster, proceed with caution!
+{{< /tip >}}
+
+{{< button "./docs/install/" "Install Velero Sentinel" >}}
+
+[velero]: https://velero.io "Velero project page"
+[prometheus:operator]: https://github.com/prometheus-operator/prometheus-operator "Github page of Prometheus Operator"
 {{< /column >}}
 
 {{< column >}}
-![diy](/images/scribble.jpg)
+
+![diy](/images/pexels-alex-ca-1034040.jpg)
 {{< /column >}}
 {{< /block >}}
