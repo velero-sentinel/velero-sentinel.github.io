@@ -1,5 +1,5 @@
-baseURL = "https://example.com/"
-title = "Compose Docs"
+baseURL = "https://velero-sentinel.github.io/"
+title = "Velero Sentinel Docs"
 enableRobotsTXT = true
 theme = "compose"
 # this example loads the theme as hugo module
