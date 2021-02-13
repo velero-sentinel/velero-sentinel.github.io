@@ -1,4 +1,4 @@
-baseURL = "https://velero-sentinel.github.io/"
+baseURL = "https://velero-sentinel.mahlberg.io/"
 title = "Velero Sentinel Docs"
 enableRobotsTXT = true
 theme = "compose"
